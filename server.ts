@@ -7,6 +7,10 @@ import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
+import dotenv from "dotenv";
+
+// 載入本機或部署環境的 .env 變數（若存在）
+dotenv.config();
 
 const app = express();
 const PORT = 3000;
@@ -20,13 +24,13 @@ function getGeminiClient(): GoogleGenAI {
   if (!aiClient) {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      console.warn("警告：未檢測到 GEMINI_API_KEY 環境變數。後端 API 回應可能會失敗。請至 AI Studio 秘密管理面板配置金鑰。");
+      console.warn("警告：未檢測到 GEMINI_API_KEY 環境變數。後端 API 回應可能會失敗。請在 TEST 環境或本機環境中設定 GEMINI_API_KEY。");
     }
     aiClient = new GoogleGenAI({
       apiKey: apiKey || "",
       httpOptions: {
         headers: {
-          'User-Agent': 'aistudio-build',
+          'User-Agent': 'test-app',
         }
       }
     });
